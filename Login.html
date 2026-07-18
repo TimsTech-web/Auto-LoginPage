@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMI AUTO - Exclusive Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+    <!-- Apple Sign In -->
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+<link rel="stylesheet" href="style.css">
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Video Background -->
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="https://videos.pexels.com/video-files/5309381/5309381-hd_1920_1080_25fps.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== POWER ON/OFF SECTION ===== -->
+    <div class="power-section" id="powerSection">
+        <div class="brand-logo">TIMI AUTO</div>
+        <div class="brand-tagline">Automotive Experience</div>
+
+        <div class="toggle-container">
+            <div class="toggle-switch" id="powerSwitch">
+                <div class="toggle-knob">
+                    <i class="fas fa-power-off" id="powerIcon"></i>
+                </div>
+                <div class="toggle-labels">
+                    <span class="toggle-label off-label">OFF</span>
+                    <span class="toggle-label on-label">ON</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-status" id="powerStatus">System Offline</div>
+
+        <div class="engine-rev" id="engineRev">
+            <i class="fas fa-tachometer-alt"></i> Engine Starting...
+        </div>
+
+        <div class="car-silhouette">
+            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50,120 Q60,100 80,95 L120,90 L140,70 Q150,60 170,58 L250,55 Q280,53 320,55 L380,58 Q400,60 420,65 L480,75 Q500,78 520,85 L580,90 Q600,92 620,95 L680,100 Q700,105 720,115 L740,125 Q750,130 750,140 L750,150 Q750,160 740,165 L720,170 Q700,175 680,175 L620,175 Q600,175 580,170 L520,165 Q500,163 480,160 L420,155 Q400,153 380,152 L320,150 Q280,148 250,150 L170,152 Q150,153 140,155 L120,160 Q100,165 80,165 L60,160 Q50,155 50,145 Z"/>
+                <circle cx="140" cy="165" r="28" fill="none" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+                <circle cx="620" cy="165" r="28" fill="none" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- ===== AUTH SECTION ===== -->
+    <div class="auth-section" id="authSection">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="logo-small">LUXE AUTO</div>
+                <p>Access Your Garage</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-switcher">
+                <button class="tab-btn active" data-tab="login">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <button class="tab-btn" data-tab="register">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="form-panel active" id="loginPanel">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" class="form-input" placeholder="owner@luxauto.com" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="form-input" placeholder="Enter your password" required id="loginPassword">
+                            <i class="fas fa-lock"></i>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                        </div>
+                    </div>
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="submit-btn" id="loginBtn">
+                        <span class="btn-text">START ENGINE</span>
+                        <span class="spinner"></span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-panel" id="registerPanel">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" class="form-input" placeholder="John Doe" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" class="form-input" placeholder="owner@luxauto.com" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="form-input" placeholder="Create password" required id="regPassword">
+                            <i class="fas fa-lock"></i>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="form-input" placeholder="Confirm password" required id="regPasswordConfirm">
+                            <i class="fas fa-shield-alt"></i>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('regPasswordConfirm', this)"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" id="registerBtn">
+                        <span class="btn-text">CREATE ACCOUNT</span>
+                        <span class="spinner"></span>
+                    </button>
+                </form>
+                <div class="terms">
+                    By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+
+            <div class="divider">OR SIGN IN WITH</div>
+
+            <div class="social-login">
+                <button class="social-btn" id="googleSignInBtn" onclick="handleGoogleSignIn()" title="Google">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn" id="facebookSignInBtn" onclick="handleFacebookSignIn()" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+                <button class="social-btn" id="appleSignInBtn" onclick="handleAppleSignIn()" title="Apple">
+                    <i class="fab fa-apple"></i>
+                </button>
+            </div>
+
+            <!-- Hidden Google One Tap -->
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                 data-callback="handleGoogleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+
+            <!-- Hidden Apple Sign In -->
+            <div id="appleid-signin"
+                 data-mode="center-align"
+                 data-type="sign in"
+                 data-color="black"
+                 data-border="true"
+                 data-border_radius="15"
+                 data-width="300"
+                 data-height="40">
+            </div>
+        </div>
+    </div>
+
+    <!-- Speedometer Decoration -->
+    <div class="speedometer" id="speedometer">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(212,175,55,0.2)" stroke-width="2"/>
+            <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(212,175,55,0.1)" stroke-width="1"/>
+            <path d="M60,60 L60,25" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" transform="rotate(45, 60, 60)"/>
+            <circle cx="60" cy="60" r="4" fill="var(--gold)"/>
+            <text x="60" y="95" text-anchor="middle" fill="var(--gold)" font-size="8" font-family="Orbitron">RPM</text>
+        </svg>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2 id="successTitle">WELCOME BACK</h2>
+            <p id="successMessage">Your engine is ready. Enjoy the ride.</p>
+        </div>
+    </div>
+
+    <!-- ===== USER DASHBOARD ===== -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <div class="logo-small">LUXE AUTO</div>
+            <div class="user-profile">
+                <img src="" alt="User" class="user-avatar" id="userAvatar">
+                <div class="user-info">
+                    <h4 id="userName">Welcome</h4>
+                    <span id="userEmail">user@example.com</span>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-power-off"></i> SIGN OUT
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="welcome-banner">
+                <i class="fas fa-car"></i>
+                <div>
+                    <h2 id="welcomeTitle">Welcome to Your Garage</h2>
+                    <p>Manage your luxury vehicle collection, schedule services, and explore exclusive offers.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-car-side"></i>
+                    <h3>3</h3>
+                    <span>Vehicles in Garage</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>2</h3>
+                    <span>Upcoming Services</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-gem"></i>
+                    <h3>Gold</h3>
+                    <span>Membership Tier</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>5</h3>
+                    <span>Exclusive Offers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GLOBAL USER STATE =====
+        let currentUser = null;
+
+        // ===== POWER SWITCH LOGIC =====
+        const powerSwitch = document.getElementById('powerSwitch');
+        const powerSection = document.getElementById('powerSection');
+        const powerStatus = document.getElementById('powerStatus');
+        const powerIcon = document.getElementById('powerIcon');
+        const engineRev = document.getElementById('engineRev');
+        const authSection = document.getElementById('authSection');
+        const carShowcase = document.getElementById('carShowcase');
+        const speedometer = document.getElementById('speedometer');
+        let isPowered = false;
+
+        powerSwitch.addEventListener('click', () => {
+            if (isPowered) {
+                // Power OFF
+                isPowered = false;
+                powerSwitch.classList.remove('active');
+                powerSection.classList.remove('on');
+                powerStatus.textContent = 'System Offline';
+                powerStatus.classList.remove('active');
+                powerIcon.className = 'fas fa-power-off';
+                engineRev.classList.remove('show');
+
+                setTimeout(() => {
+                    authSection.classList.remove('active');
+                    carShowcase.classList.remove('active');
+                    speedometer.classList.remove('active');
+                }, 300);
+            } else {
+                // Power ON
+                isPowered = true;
+                powerSwitch.classList.add('active');
+                powerStatus.textContent = 'System Online';
+                powerStatus.classList.add('active');
+                powerIcon.className = 'fas fa-bolt';
+                engineRev.classList.add('show');
+
+                setTimeout(() => {
+                    engineRev.innerHTML = '<i class="fas fa-tachometer-alt"></i> Engine Revving...';
+                }, 400);
+                setTimeout(() => {
+                    engineRev.innerHTML = '<i class="fas fa-check"></i> Engine Ready';
+                }, 1200);
+
+                setTimeout(() => {
+                    powerSection.classList.add('on');
+                    authSection.classList.add('active');
+                    carShowcase.classList.add('active');
+                    speedometer.classList.add('active');
+                }, 800);
+            }
+        });
+
+        // ===== TAB SWITCHING =====
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const formPanels = document.querySelectorAll('.form-panel');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                formPanels.forEach(panel => panel.classList.remove('active'));
+                document.getElementById(tab + 'Panel').classList.add('active');
+            });
+        });
+
+        // ===== PASSWORD TOGGLE =====
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // ===== SHOW DASHBOARD =====
+        function showDashboard(user) {
+            currentUser = user;
+            const dashboard = document.getElementById('dashboard');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            const welcomeTitle = document.getElementById('welcomeTitle');
+
+            userAvatar.src = user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=D4AF37&color=000';
+            userName.textContent = user.name;
+            userEmail.textContent = user.email;
+            welcomeTitle.textContent = 'Welcome back, ' + user.name.split(' ')[0];
+
+            dashboard.classList.add('active');
+        }
+
+        // ===== LOGOUT =====
+        function handleLogout() {
+            // Google logout
+            if (window.google && window.google.accounts) {
+                google.accounts.id.disableAutoSelect();
+            }
+            // Facebook logout
+            if (window.FB) {
+                FB.logout();
+            }
+
+            currentUser = null;
+            document.getElementById('dashboard').classList.remove('active');
+
+            // Reset to power off state
+            isPowered = false;
+            powerSwitch.classList.remove('active');
+            powerSection.classList.remove('on');
+            powerStatus.textContent = 'System Offline';
+            powerStatus.classList.remove('active');
+            powerIcon.className = 'fas fa-power-off';
+            engineRev.classList.remove('show');
+            authSection.classList.remove('active');
+            carShowcase.classList.remove('active');
+            speedometer.classList.remove('active');
+        }
+
+        // ===== GOOGLE SIGN IN =====
+        function handleGoogleSignIn() {
+            // Initialize Google Identity Services
+            if (window.google && window.google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+                    callback: handleGoogleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+
+                // Prompt the user to select a Google account
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        // Fallback: show a demo success for testing
+                        showDemoSuccess('Google');
+                    }
+                });
+            } else {
+                // SDK not loaded yet, show demo
+                showDemoSuccess('Google');
+            }
+        }
+
+        function handleGoogleCredentialResponse(response) {
+            // Decode the JWT token to get user info
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            const user = {
+                name: payload.name,
+                email: payload.email,
+                picture: payload.picture,
+                provider: 'Google'
+            };
+            showSuccessAndDashboard(user, 'Google');
+        }
+
+        // ===== FACEBOOK SIGN IN =====
+        function handleFacebookSignIn() {
+            if (window.FB) {
+                FB.login((response) => {
+                    if (response.authResponse) {
+                        FB.api('/me', { fields: 'name,email,picture' }, (userInfo) => {
+                            const user = {
+                                name: userInfo.name,
+                                email: userInfo.email,
+                                picture: userInfo.picture?.data?.url,
+                                provider: 'Facebook'
+                            };
+                            showSuccessAndDashboard(user, 'Facebook');
+                        });
+                    } else {
+                        console.log('Facebook login cancelled');
+                    }
+                }, { scope: 'email,public_profile' });
+            } else {
+                // SDK not loaded, show demo
+                showDemoSuccess('Facebook');
+            }
+        }
+
+        // Initialize Facebook SDK
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: 'YOUR_FACEBOOK_APP_ID',
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0'
+            });
+        };
+
+        // ===== APPLE SIGN IN =====
+        function handleAppleSignIn() {
+            // Apple Sign In requires server-side validation
+            // This is a client-side demo implementation
+            if (window.AppleID && window.AppleID.auth) {
+                AppleID.auth.signIn({
+                    clientId: 'YOUR_APPLE_CLIENT_ID',
+                    redirectURI: 'YOUR_REDIRECT_URI',
+                    usePopup: true
+                }).then((response) => {
+                    // Handle Apple sign in response
+                    const user = {
+                        name: response.user?.name?.firstName + ' ' + response.user?.name?.lastName || 'Apple User',
+                        email: response.user?.email || 'user@icloud.com',
+                        picture: null,
+                        provider: 'Apple'
+                    };
+                    showSuccessAndDashboard(user, 'Apple');
+                }).catch((error) => {
+                    console.log('Apple sign in error:', error);
+                    showDemoSuccess('Apple');
+                });
+            } else {
+                showDemoSuccess('Apple');
+            }
+        }
+
+        // ===== TWITTER/X SIGN IN =====
+        function handleTwitterSignIn() {
+            // Twitter OAuth 2.0 requires server-side flow
+            // For demo purposes, we'll show a simulated success
+            showDemoSuccess('X (Twitter)');
+        }
+
+        // ===== DEMO SUCCESS (for testing without real API keys) =====
+        function showDemoSuccess(provider) {
+            const demoUsers = {
+                'Google': { name: 'Alexander Sterling', email: 'alex.sterling@gmail.com', picture: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face' },
+                'Facebook': { name: 'Marcus Chen', email: 'marcus.chen@facebook.com', picture: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face' },
+                'Apple': { name: 'James Worthington', email: 'j.worthington@icloud.com', picture: null },
+                'X (Twitter)': { name: 'Victor Blackwood', email: 'v.blackwood@x.com', picture: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face' }
+            };
+
+            const user = demoUsers[provider] || demoUsers['Google'];
+            user.provider = provider;
+            showSuccessAndDashboard(user, provider);
+        }
+
+        // ===== SUCCESS OVERLAY & DASHBOARD =====
+        function showSuccessAndDashboard(user, provider) {
+            const successOverlay = document.getElementById('successOverlay');
+            const successTitle = document.getElementById('successTitle');
+            const successMessage = document.getElementById('successMessage');
+
+            successTitle.textContent = 'AUTHENTICATED';
+            successMessage.textContent = 'Signed in with ' + provider + '. Redirecting to your garage...';
+            successOverlay.classList.add('show');
+
+            setTimeout(() => {
+                successOverlay.classList.remove('show');
+                showDashboard(user);
+            }, 2500);
+        }
+
+        // ===== FORM SUBMISSION =====
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.classList.add('loading');
+
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                const email = e.target.querySelector('input[type="email"]').value;
+                const user = {
+                    name: email.split('@')[0].replace(/\./g, ' ').replace(/\w/g, l => l.toUpperCase()),
+                    email: email,
+                    picture: null,
+                    provider: 'Email'
+                };
+                showSuccessAndDashboard(user, 'Email');
+            }, 2000);
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('registerBtn');
+            btn.classList.add('loading');
+
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                const name = e.target.querySelector('input[type="text"]').value;
+                const email = e.target.querySelector('input[type="email"]').value;
+                const user = {
+                    name: name,
+                    email: email,
+                    picture: null,
+                    provider: 'Email'
+                };
+                showSuccessAndDashboard(user, 'Email');
+            }, 2000);
+        });
+
+        // ===== PARTICLE SYSTEM =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                particle.style.width = (Math.random() * 3 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ===== CAR IMAGE ROTATION =====
+        const carImages = [
+            'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80',
+            'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80',
+            'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80',
+            'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80'
+        ];
+        let currentCarIndex = 0;
+
+        setInterval(() => {
+            if (isPowered) {
+                currentCarIndex = (currentCarIndex + 1) % carImages.length;
+                const carImage = document.getElementById('carImage');
+                carImage.style.opacity = '0';
+                setTimeout(() => {
+                    carImage.src = carImages[currentCarIndex];
+                    carImage.style.opacity = '1';
+                }, 300);
+            }
+        }, 8000);
+
+        // Input focus effects
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('i:first-of-type').style.color = 'var(--gold)';
+            });
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.parentElement.querySelector('i:first-of-type').style.color = 'var(--light-gray)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
